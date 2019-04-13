@@ -20,6 +20,7 @@ class NavBar extends Component {
     }
 
     handleToggle() {
+        console.log('handleToggle!!');
         this.setState({
             open: !this.state.open
         });

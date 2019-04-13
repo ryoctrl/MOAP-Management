@@ -10,19 +10,24 @@ class TopMenu extends Component {
         };
         this.clickMenu = this.clickMenu.bind(this);
         this.onClose = this.onClose.bind(this);
+        this.handleClose = this.handleClose.bind(this);
     }
 
     clickMenu(e) {
         this.setState({
             menuOpen: true
         });
-        //this.props.handleClose(e);
     }
 
     onClose(e) {
+        this.props.handleClose(e);
         this.setState({
             menuOpen: false
         });
+    }
+
+    handleClose(e) {
+        if(this.state.menuOpen) return;
         this.props.handleClose(e);
     }
 
@@ -31,20 +36,22 @@ class TopMenu extends Component {
         return (
             <Popper open={open} anchorEl={anchorEl} transition disablePortal>
         {({ TransitionProps, placement }) => (
+            <div>
             <Grow
                 {...TransitionProps}
                 id="menu-list-grow"
                 style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom'}}
             >
                 <Paper>
-                    <ClickAwayListener onClickAway={handleClose}>
+                    <ClickAwayListener onClickAway={this.handleClose}>
                         <MenuList>
                             <MenuItem onClick={this.clickMenu}>Add Menu</MenuItem>
-                            <AddMenu menuOpen={this.state.menuOpen} onClose={this.onClose} />
                         </MenuList>
                     </ClickAwayListener>
                 </Paper>
             </Grow>
+            <AddMenu menuOpen={this.state.menuOpen} onClose={this.onClose} />
+        </div>
         )}
             </Popper>
         )
