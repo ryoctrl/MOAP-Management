@@ -1,7 +1,13 @@
 import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
-import { fork, take, call, put, channel} from 'redux-saga/effects';
-import { newOrder } from './actions';
+import { fork, take, call, put } from 'redux-saga/effects';
+import { allMenus } from './api';
+import { 
+    fetchMenus, 
+    successFetchMenus, 
+    failureFetchMenus, 
+    newOrder 
+} from './actions';
 
 const URL = 'https://moap-api.mosin.jp/';
 
@@ -38,9 +44,22 @@ function* handleIO(socket) {
 
 function* flow() {
     const socket = yield call(connect);
-    const task = yield fork(handleIO, socket);
+    yield fork(handleIO, socket);
+}
+
+function* menuInit() {
+    while(true) {
+        yield take(fetchMenus);
+        const { menus, error } = yield call(allMenus);
+        if(menus && !error) {
+            yield put(successFetchMenus({ menus }));
+        } else {
+            yield put(failureFetchMenus({ error }));
+        }
+    }
 }
 
 export default function* rootSaga() {
+    yield fork(menuInit);
     yield fork(flow);
 }

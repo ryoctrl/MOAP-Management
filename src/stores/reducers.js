@@ -1,12 +1,25 @@
 import { combineReducers } from 'redux';
 import { createReducer } from 'redux-act';
-import { newOrder } from './actions';
+import { fetchMenus, successFetchMenus, failureFetchMenus,  newOrder } from './actions';
 
 const initial = {
+    menus: [],
     orders: {
         list: [],
     }
 }
+
+const menus = createReducer({
+    [fetchMenus]: (state, payload) => {
+        return [];
+    },
+    [successFetchMenus]: (state, payload) => {
+        return payload.menus;
+    },
+    [failureFetchMenus]: (state, payload) => {
+        return [];
+    }
+}, initial.menus);
 
 const orders = createReducer({
     [newOrder]: (state, payload) => {
@@ -19,5 +32,5 @@ const orders = createReducer({
 }, initial.orders);
 
 export default combineReducers(
-    { orders }
+    { menus, orders }
 )
