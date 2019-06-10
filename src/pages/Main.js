@@ -5,6 +5,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Menu from './Menu';
 import Orders from './Orders';
 import NavBar from '../components/NavBar';
+import { connect } from 'react-redux';
+import { fetchMenus }  from '../stores/actions';
 
 const theme = createMuiTheme({
     typography: {
@@ -21,6 +23,10 @@ class Main extends Component {
             drawerOpen: false,
             name: 'Top'
         };
+    }
+
+    componentWillMount() {
+        this.props.dispatch(fetchMenus());
     }
 
     handleToggle() {
@@ -121,4 +127,10 @@ const styles = theme => ({
     },
 });
 
-export default withStyles(styles, { withTheme: true })(Main);
+function select({menus, orders}) {
+    return { menus, orders};
+}
+
+Main = withStyles(styles, { withTheme: true })(Main);
+export default connect(select)(Main);
+
