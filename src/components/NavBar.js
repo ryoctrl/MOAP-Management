@@ -63,6 +63,7 @@ class NavBar extends Component {
                     </div>
                     <Divider />
                     <MenuItem onClick={() => changePage('Top')}>Top</MenuItem>
+                    <MenuItem onClick={() => changePage('Orders')}>Orders</MenuItem>
                 </Drawer>
             </div>
         );
