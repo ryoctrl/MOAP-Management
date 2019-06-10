@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
 import Menu from './Menu';
+import Orders from './Orders';
 import NavBar from '../components/NavBar';
 
 const theme = createMuiTheme({
@@ -52,7 +53,7 @@ class Main extends Component {
                         <div className={classes.drawerHeader}/>
                         {(() => {
                         if(this.state.page === 'Top') return <Menu />
-                        else return <Menu />
+                        else return <Orders />
                         })()}
                     </main>
                 </div>
