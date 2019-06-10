@@ -32,7 +32,7 @@ class TopMenu extends Component {
     }
 
     render() {
-        const { open, anchorEl, handleClose } = this.props;
+        const { open, anchorEl } = this.props;
         return (
             <Popper open={open} anchorEl={anchorEl} transition disablePortal>
         {({ TransitionProps, placement }) => (
