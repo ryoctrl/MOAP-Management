@@ -32,8 +32,7 @@ class NavBar extends Component {
     };
 
     render() {
-        const { onToggle, changePage, classes, theme, drawerOpen, page } = this.props;
-        const { open } = this.state;
+        const { onToggle, changePage, classes, theme, drawerOpen } = this.props;
 
         return (
             <div>
@@ -63,6 +62,7 @@ class NavBar extends Component {
                     </div>
                     <Divider />
                     <MenuItem onClick={() => changePage('Top')}>Top</MenuItem>
+                    <MenuItem onClick={() => changePage('Orders')}>Orders</MenuItem>
                 </Drawer>
             </div>
         );
