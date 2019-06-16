@@ -11,25 +11,22 @@ class OrderCard extends Component {
         });
 
         const cols = [
-            {title: 'Name', field: 'name'}
+            {title: 'Name', field: 'name'},
+            {title: '数量', field: 'amount'}
         ];
 
-        if(order.length === 0) {
-            return(<h3>現在のオーダーはありません</h3>)
-        } else {
-            return (
-                <MaterialTable
-                    title="Orders"
-                    columns={cols}
-                    data={order}
-                    options={{
-                        search: false,
-                        paging: false,
-                        //pageSize: order.length,
-                    }}
-                />
-            )
-        }
+        return (
+            <MaterialTable
+                title="Orders"
+                columns={cols}
+                data={order}
+                options={{
+                    search: false,
+                    paging: false,
+                    //pageSize: order.length,
+                }}
+            />
+        )
     }
 }
 
