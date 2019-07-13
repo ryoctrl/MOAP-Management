@@ -7,7 +7,9 @@ import {
     fetchUncompletedOrders,
     successFetchUncompletedOrders,
     failureFetchUncompletedOrders,
-    newOrder } from './actions';
+    newOrder,
+    orderCompleted,
+} from './actions';
 
 const initial = {
     menus: [],
@@ -37,6 +39,11 @@ const orders = createReducer({
             ...state,
             list: [ ...state.list, payload]
         };
+    },
+    [orderCompleted]: (state, payload) => {
+        const newState = Object.assign({}, state);
+        newState.list = newState.list.filter(order => order.id !== payload.id);
+        return newState;
     },
     [fetchUncompletedOrders]: (state, payload) => {
         const newState = Object.assign({}, state);

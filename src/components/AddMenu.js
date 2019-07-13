@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { TextField, Dialog, DialogContent, DialogContentText, DialogTitle, FormControl, FormLabel, Button, FormHelperText } from '@material-ui/core';
-import CartContext from '../contexts/cart';
+import { TextField, Dialog, DialogContent, /*DialogContentText,*/ DialogTitle, /*FormControl, FormLabel, */Button/*, FormHelperText */} from '@material-ui/core';
+//import CartContext from '../contexts/cart';
 
 const API_HOST = process.env.REACT_APP_API_HOST;
-const MenuEndpoint = API_HOST + 'api/menues';
+//const MenuEndpoint = API_HOST + 'api/menues';
 const CreateEndpoint = API_HOST + 'api/menues/create';
 
 class AddMenu extends Component {
@@ -31,10 +31,12 @@ class AddMenu extends Component {
         e.preventDefault();
         const obj = Object.assign({}, this.state);
         console.log(obj);
+        /*
         const headers = {
             'Accept': 'application/json',
             'Content-Type': 'multipart/form-data'
         };
+        */
         const form = new FormData();
         console.log(obj.name, obj.price, obj.stocks, obj.requiredTime);
         form.append('name', obj.name);
@@ -115,13 +117,13 @@ class AddMenu extends Component {
 
 const styles = theme => ({
     textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
         width: '95%',
     },
     submitButton: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
         width: '95%'
     }
 });

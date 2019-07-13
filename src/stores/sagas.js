@@ -1,7 +1,11 @@
 import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
 import { fork, take, call, put } from 'redux-saga/effects';
-import { allMenus, uncompletedOrders } from './api';
+import { 
+    allMenus, 
+    uncompletedOrders,
+    completeOrderRequest,
+} from './api';
 import { 
     fetchMenus, 
     successFetchMenus, 
@@ -9,7 +13,9 @@ import {
     fetchUncompletedOrders,
     successFetchUncompletedOrders,
     failureFetchUncompletedOrders,
-    newOrder 
+    newOrder,
+    completeOrder,
+    orderCompleted,
 } from './actions';
 
 const URL = 'https://moap-api.mosin.jp/';
@@ -27,6 +33,10 @@ const subscribe = socket => {
     return eventChannel(emit => {
         socket.on('orders.new', message => {
             emit(newOrder(message));
+        });
+
+        socket.on('orders.complete', message => {
+            emit(orderCompleted(message));
         });
         return () => {};
     });
@@ -74,8 +84,16 @@ function* orderInit() {
     }
 }
 
+function* completeOrderFlow() {
+    while(true) {
+        const action = yield take(completeOrder)
+        yield call(completeOrderRequest, action.payload);
+    }
+}
+
 export default function* rootSaga() {
     yield fork(menuInit);
     yield fork(orderInit);
+    yield fork(completeOrderFlow);
     yield fork(flow);
 }
