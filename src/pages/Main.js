@@ -6,7 +6,10 @@ import Menu from './Menu';
 import Orders from './Orders';
 import NavBar from '../components/NavBar';
 import { connect } from 'react-redux';
-import { fetchMenus }  from '../stores/actions';
+import {
+    fetchMenus,
+    fetchUncompletedOrders,
+} from '../stores/actions';
 
 const theme = createMuiTheme({
     typography: {
@@ -26,7 +29,9 @@ class Main extends Component {
     }
 
     componentWillMount() {
-        this.props.dispatch(fetchMenus());
+        const { dispatch } = this.props;
+        dispatch(fetchMenus());
+        dispatch(fetchUncompletedOrders());
     }
 
     handleToggle() {
