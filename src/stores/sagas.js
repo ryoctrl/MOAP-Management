@@ -1,11 +1,14 @@
 import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
 import { fork, take, call, put } from 'redux-saga/effects';
-import { allMenus } from './api';
+import { allMenus, uncompletedOrders } from './api';
 import { 
     fetchMenus, 
     successFetchMenus, 
     failureFetchMenus, 
+    fetchUncompletedOrders,
+    successFetchUncompletedOrders,
+    failureFetchUncompletedOrders,
     newOrder 
 } from './actions';
 
@@ -59,7 +62,20 @@ function* menuInit() {
     }
 }
 
+function* orderInit() {
+    while(true) {
+        yield take(fetchUncompletedOrders);
+        const { data, error } = yield call(uncompletedOrders);
+        if(data && !error) {
+            yield put(successFetchUncompletedOrders({ data }));
+        } else {
+            yield put(failureFetchUncompletedOrders({ error }));
+        }
+    }
+}
+
 export default function* rootSaga() {
     yield fork(menuInit);
+    yield fork(orderInit);
     yield fork(flow);
 }
