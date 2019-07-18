@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { TextField, Dialog, DialogContent, /*DialogContentText,*/ DialogTitle, /*FormControl, FormLabel, */Button/*, FormHelperText */} from '@material-ui/core';
+import axios from 'axios';
 //import CartContext from '../contexts/cart';
 
 const API_HOST = process.env.REACT_APP_API_HOST;
@@ -30,29 +31,22 @@ class AddMenu extends Component {
     handleSubmit(e) {
         e.preventDefault();
         const obj = Object.assign({}, this.state);
-        console.log(obj);
-        /*
-        const headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'multipart/form-data'
-        };
-        */
         const form = new FormData();
-        console.log(obj.name, obj.price, obj.stocks, obj.requiredTime);
         form.append('name', obj.name);
         form.append('price', obj.price);
         form.append('stocks', obj.stocks);
         form.append('requiredTime', obj.requiredTime);
         form.append('image', obj.image);
-        console.log(form);
 
-        return fetch(CreateEndpoint, {method: 'POST', /*headers: headers,*/  body: form})
-            .then((res) => {
+        axios.post(CreateEndpoint, form)
+            .then(res => res.data)
+            .then(data => {
                 console.log('POST SUCCESS');
-                console.log(res);
-            }).catch((err) => {
+                console.log(data);
+            })
+            .catch(error => {
                 console.log('POST ERROR!');
-                console.log(err);
+                console.log(error);
             });
     }
 
@@ -124,7 +118,8 @@ const styles = theme => ({
     submitButton: {
         marginLeft: theme.spacing(1),
         marginRight: theme.spacing(1),
-        width: '95%'
+        width: '95%',
+        zIndex: 1000
     }
 });
 
