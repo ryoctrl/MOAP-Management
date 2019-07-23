@@ -9,6 +9,7 @@ import {
     failureFetchUncompletedOrders,
     newOrder,
     orderCompleted,
+    orderPaid,
 } from './actions';
 
 const initial = {
@@ -35,15 +36,18 @@ const menus = createReducer({
 
 const orders = createReducer({
     [newOrder]: (state, payload) => {
-        return {
-            ...state,
-            list: [ ...state.list, payload]
-        };
+        return state;
     },
     [orderCompleted]: (state, payload) => {
         const newState = Object.assign({}, state);
         newState.list = newState.list.filter(order => order.id !== payload.id);
         return newState;
+    },
+    [orderPaid]: (state, payload) => {
+        return {
+            ...state,
+            list: [ ...state.list, payload]
+        }
     },
     [fetchUncompletedOrders]: (state, payload) => {
         const newState = Object.assign({}, state);

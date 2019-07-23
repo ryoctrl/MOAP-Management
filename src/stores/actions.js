@@ -21,5 +21,7 @@ export const newOrder = createAction('new order');
 
 export const orderCompleted = createAction('orderCompleted');
 
+export const orderPaid = createAction('orderPaid');
+
 export const COMPLETE_ORDER = 'COMPLETE_ORDER';
 export const completeOrder = createAction(COMPLETE_ORDER);

@@ -16,6 +16,7 @@ import {
     newOrder,
     completeOrder,
     orderCompleted,
+    orderPaid,
 } from './actions';
 
 const URL = 'https://moap-api.mosin.jp/';
@@ -37,6 +38,9 @@ const subscribe = socket => {
 
         socket.on('orders.complete', message => {
             emit(orderCompleted(message));
+        });
+        socket.on('orders.paid', message => {
+            emit(orderPaid(message));
         });
         return () => {};
     });
