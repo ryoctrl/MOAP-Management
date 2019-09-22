@@ -1,12 +1,22 @@
 import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
 import { fork, take, call, put } from 'redux-saga/effects';
-import { allMenus } from './api';
+import { 
+    allMenus, 
+    uncompletedOrders,
+    completeOrderRequest,
+} from './api';
 import { 
     fetchMenus, 
     successFetchMenus, 
     failureFetchMenus, 
-    newOrder 
+    fetchUncompletedOrders,
+    successFetchUncompletedOrders,
+    failureFetchUncompletedOrders,
+    newOrder,
+    completeOrder,
+    orderCompleted,
+    orderPaid,
 } from './actions';
 
 const URL = 'https://moap-api.mosin.jp/';
@@ -24,6 +34,13 @@ const subscribe = socket => {
     return eventChannel(emit => {
         socket.on('orders.new', message => {
             emit(newOrder(message));
+        });
+
+        socket.on('orders.complete', message => {
+            emit(orderCompleted(message));
+        });
+        socket.on('orders.paid', message => {
+            emit(orderPaid(message));
         });
         return () => {};
     });
@@ -59,7 +76,28 @@ function* menuInit() {
     }
 }
 
+function* orderInit() {
+    while(true) {
+        yield take(fetchUncompletedOrders);
+        const { data, error } = yield call(uncompletedOrders);
+        if(data && !error) {
+            yield put(successFetchUncompletedOrders({ data }));
+        } else {
+            yield put(failureFetchUncompletedOrders({ error }));
+        }
+    }
+}
+
+function* completeOrderFlow() {
+    while(true) {
+        const action = yield take(completeOrder)
+        yield call(completeOrderRequest, action.payload);
+    }
+}
+
 export default function* rootSaga() {
     yield fork(menuInit);
+    yield fork(orderInit);
+    yield fork(completeOrderFlow);
     yield fork(flow);
 }

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { TextField, Dialog, DialogContent, DialogContentText, DialogTitle, FormControl, FormLabel, Button, FormHelperText } from '@material-ui/core';
-import CartContext from '../contexts/cart';
+import { TextField, Dialog, DialogContent, /*DialogContentText,*/ DialogTitle, /*FormControl, FormLabel, */Button/*, FormHelperText */} from '@material-ui/core';
+import axios from 'axios';
+//import CartContext from '../contexts/cart';
 
 const API_HOST = process.env.REACT_APP_API_HOST;
-const MenuEndpoint = API_HOST + 'api/menues';
+//const MenuEndpoint = API_HOST + 'api/menues';
 const CreateEndpoint = API_HOST + 'api/menues/create';
 
 class AddMenu extends Component {
@@ -30,27 +31,22 @@ class AddMenu extends Component {
     handleSubmit(e) {
         e.preventDefault();
         const obj = Object.assign({}, this.state);
-        console.log(obj);
-        const headers = {
-            'Accept': 'application/json',
-            'Content-Type': 'multipart/form-data'
-        };
         const form = new FormData();
-        console.log(obj.name, obj.price, obj.stocks, obj.requiredTime);
         form.append('name', obj.name);
         form.append('price', obj.price);
         form.append('stocks', obj.stocks);
         form.append('requiredTime', obj.requiredTime);
         form.append('image', obj.image);
-        console.log(form);
 
-        return fetch(CreateEndpoint, {method: 'POST', /*headers: headers,*/  body: form})
-            .then((res) => {
+        axios.post(CreateEndpoint, form)
+            .then(res => res.data)
+            .then(data => {
                 console.log('POST SUCCESS');
-                console.log(res);
-            }).catch((err) => {
+                console.log(data);
+            })
+            .catch(error => {
                 console.log('POST ERROR!');
-                console.log(err);
+                console.log(error);
             });
     }
 
@@ -115,14 +111,15 @@ class AddMenu extends Component {
 
 const styles = theme => ({
     textField: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
         width: '95%',
     },
     submitButton: {
-        marginLeft: theme.spacing.unit,
-        marginRight: theme.spacing.unit,
-        width: '95%'
+        marginLeft: theme.spacing(1),
+        marginRight: theme.spacing(1),
+        width: '95%',
+        zIndex: 1000
     }
 });
 
