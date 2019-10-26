@@ -25,3 +25,9 @@ export const orderPaid = createAction('orderPaid');
 
 export const COMPLETE_ORDER = 'COMPLETE_ORDER';
 export const completeOrder = createAction(COMPLETE_ORDER);
+
+export const CHANGE_PAGE = 'CHANGE_PAGE';
+export const changePage = createAction(CHANGE_PAGE);
+
+export const CHANGE_ORDERS_PAGE_LAYOUT = 'CHANGE_ORDERS_PAGE_LAYOUT';
+export const changeOrdersPageLayout = createAction(CHANGE_ORDERS_PAGE_LAYOUT);

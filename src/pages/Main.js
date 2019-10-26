@@ -48,8 +48,8 @@ class Main extends Component {
     }
 
     render() {
-        const { classes } = this.props;
-        const { drawerOpen, page } = this.state;
+        const { classes, page } = this.props;
+        const { drawerOpen } = this.state;
         return (
             <MuiThemeProvider theme={theme}>
                 <div className={classes.root}>
@@ -62,10 +62,8 @@ class Main extends Component {
                         page={page}/>
                     <main className={classNames(classes.content, {[classes.contentShift]: drawerOpen,})}>
                         <div className={classes.drawerHeader}/>
-                        {(() => {
-                        if(this.state.page === 'Top') return <Menu />
-                        else return <Orders />
-                        })()}
+                        { page.name === 'TOP' && <Menu />}
+                        { page.name === 'ORDERS' && <Orders />}
                     </main>
                 </div>
             </MuiThemeProvider>
@@ -132,10 +130,6 @@ const styles = theme => ({
     },
 });
 
-function select({menus, orders}) {
-    return { menus, orders};
-}
-
 Main = withStyles(styles, { withTheme: true })(Main);
-export default connect(select)(Main);
+export default connect(stores => stores)(Main);
 

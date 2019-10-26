@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { AppBar, MenuItem, Drawer, Toolbar, Typography, IconButton, Divider } from '@material-ui/core';
@@ -6,8 +7,11 @@ import MoreIcon from '@material-ui/icons/MoreVert';
 import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-
 import TopMenu from './TopMenu';
+import {
+    changePage
+} from '../stores/actions';
+import DateHelper from '../helpers/DateHelper';
 
 class NavBar extends Component {
     constructor() {
@@ -32,7 +36,7 @@ class NavBar extends Component {
     };
 
     render() {
-        const { onToggle, changePage, classes, theme, drawerOpen } = this.props;
+        const { dispatch, onToggle, classes, theme, drawerOpen, page} = this.props;
 
         return (
             <div>
@@ -42,7 +46,8 @@ class NavBar extends Component {
                             <MenuIcon />
                         </IconButton>
                         <Typography variant="h6" color="inherit" className={classes.grow}>
-                            MOAP - Management
+                            MOAP - Management　
+                            { new DateHelper().format('MM月DD日 HH:mm') }
                         </Typography>
                         <IconButton buttonRef={node => {
                                 this.anchorEl = node;
@@ -61,8 +66,8 @@ class NavBar extends Component {
                         </IconButton>
                     </div>
                     <Divider />
-                    <MenuItem onClick={() => changePage('Top')}>Top</MenuItem>
-                    <MenuItem onClick={() => changePage('Orders')}>Orders</MenuItem>
+                    <MenuItem onClick={() => dispatch(changePage('TOP'))}>Top</MenuItem>
+                    <MenuItem onClick={() => dispatch(changePage('ORDERS'))}>Orders</MenuItem>
                 </Drawer>
             </div>
         );
@@ -74,5 +79,4 @@ NavBar.propTypes = {
     theme: PropTypes.object.isRequired,
 };
 
-export default NavBar;
-
+export default connect(s => s)(NavBar);

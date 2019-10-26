@@ -1,63 +1,65 @@
 import React, { Component } from 'react';
-import { Grid } from '@material-ui/core';
+import { Grid, Typography} from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 import OrderCard from '../OrderCard';
+import DateHelper from '../../helpers/DateHelper';
 
 class OrdersTimeTableView extends Component {
     render() {
         const { orders, classes } = this.props;
         const ordersList = orders.list;
 
+        if(ordersList.length === 0) {
+            return (
+                <Typography align="center" variant="h5" component="h5">
+                    現在注文はありません。
+                </Typography>
+            )
+        } 
+
+
         const timetable = {};
         ordersList.forEach(order => {
             if(!order.handed_at) return;
-            const tt = timetable[order.handed_at];
+            const dateStr = new DateHelper(order.handed_at, true).format('HH:mm');
+            const tt = timetable[dateStr];
             if(!tt) {
-                return timetable[order.handed_at] = [ order ];
+                return timetable[dateStr] = [ order ];
             } 
 
             tt.push(order);
         });
 
-        console.log(timetable);
-
-        if(ordersList.length === 0) {
-            return <div>現在注文はありません。</div>
-        } 
-
+        
         return (
             <Grid container spacing={2}>
                 { Object.keys(timetable).map(time => {
                     const orders = timetable[time];
-                    console.log(time);
                     return (
-                        <Grid item xs={6} lg={3} className={classes.card}>
-                            <div> { time } </div>
-                            { orders.map(order => <OrderCard key={order.id} order={order} />) }
+                        <Grid key={`timetable-column-${time}`} item xs={6} lg={3} className={classes.card}>
+                            <Typography align="center" variant="h5" component="h5">
+                                {time} 提供
+                            </Typography>
+                            { orders.map(order => (
+                                <div key={`timetable-column-item-${order.id}`} className={classes.orderCard}> 
+                                    <OrderCard key={order.id} order={order} />
+                                </div>
+                            ))}
                         </Grid>
                     )
                 })}
             </Grid>
         );
-
-        /*
-        return (
-            <Grid container spacing={2}>
-            {ordersList.map(order => (
-                <Grid key={order.id} item xs={6} lg={3} className={classes.card}>
-                    <OrderCard key={order.id} order={order}/>
-                </Grid>
-            ))}
-            </Grid>
-        )
-        */
     }
 }
 
 const styles = theme => ({
     card: {
         width: '100%'
+    },
+    orderCard: {
+        marginTop: '10px',
     }
 });
 

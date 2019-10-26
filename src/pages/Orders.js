@@ -5,15 +5,19 @@ import { connect } from 'react-redux';
 import OrderCard from '../components/OrderCard';
 import OrdersGridView from '../components/Orders/OrdersGridView';
 import OrdersTimeTableView from '../components/Orders/OrdersTimeTableView';
+import layouts from '../constants/OrdersPageLayout';
 
 class Orders extends Component {
     render() {
-        const { orders, classes } = this.props;
+        const { page, orders, classes } = this.props;
         const ordersList = orders.list;
 
-        return (
-            <OrdersTimeTableView />
-        )
+        switch(page.ordersPage.layout) {
+            case layouts.TIMETABLE:
+                return <OrdersTimeTableView />
+            case layouts.LIST:
+                return <OrdersGridView />
+        }
     }
 }
 

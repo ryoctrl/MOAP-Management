@@ -10,7 +10,10 @@ import {
     newOrder,
     orderCompleted,
     orderPaid,
+    changePage,
+    changeOrdersPageLayout
 } from './actions';
+import ORDERS_PAGE_LAYOUT from '../constants/OrdersPageLayout';
 
 const initial = {
     menus: [],
@@ -19,6 +22,12 @@ const initial = {
         isInitialized: false,
         isFetching: false,
         error: null
+    },
+    page: {
+        name: 'ORDERS',
+        ordersPage: {
+            layout: ORDERS_PAGE_LAYOUT.TIMETABLE,
+        }
     }
 }
 
@@ -69,6 +78,15 @@ const orders = createReducer({
     }
 }, initial.orders);
 
+const page = createReducer({
+    [changePage]: (state, payload) => {
+        return Object.assign({}, state, { name: payload });
+    },
+    [changeOrdersPageLayout]: (state, payload) => {
+        return Object.assign({}, state, {ordersPage: { layout: payload }});
+    }
+}, initial.page);
+
 export default combineReducers(
-    { menus, orders }
+    { menus, orders, page}
 )

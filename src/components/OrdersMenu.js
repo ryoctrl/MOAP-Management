@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import  { Paper, Popper, ClickAwayListener, Grow, MenuItem, MenuList } from '@material-ui/core';
 import AddMenu from './AddMenu';
-import LayoutMenu from './LayoutMenu';
-import { connect } from 'react-redux';
 
 class TopMenu extends Component {
     constructor(props) {
@@ -34,7 +32,7 @@ class TopMenu extends Component {
     }
 
     render() {
-        const { open, anchorEl, page } = this.props;
+        const { open, anchorEl } = this.props;
         return (
             <Popper open={open} anchorEl={anchorEl} transition disablePortal>
         {({ TransitionProps, placement }) => (
@@ -47,14 +45,12 @@ class TopMenu extends Component {
                 <Paper>
                     <ClickAwayListener onClickAway={this.handleClose}>
                         <MenuList>
-                            { page.name === 'TOP'  && <MenuItem onClick={this.clickMenu}>Add Menu</MenuItem>}
-                            { page.name === 'ORDERS' && <MenuItem onClick={this.clickMenu}>Change Layout</MenuItem>}
+                            <MenuItem onClick={this.clickMenu}>Add Menu</MenuItem>
                         </MenuList>
                     </ClickAwayListener>
                 </Paper>
             </Grow>
-            { page.name === 'TOP' && <AddMenu menuOpen={this.state.menuOpen} onClose={this.onClose} />}
-            { page.name === 'ORDERS' && <LayoutMenu  menuOpen={this.state.menuOpen} onClose={this.onClose} />}
+            <AddMenu menuOpen={this.state.menuOpen} onClose={this.onClose} />
         </div>
         )}
             </Popper>
@@ -62,4 +58,4 @@ class TopMenu extends Component {
     }
 }
 
-export default connect(stores => stores)(TopMenu);
+export default TopMenu;
