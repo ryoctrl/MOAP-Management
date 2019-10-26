@@ -11,6 +11,7 @@ class OrdersTimeTableView extends Component {
 
         const timetable = {};
         ordersList.forEach(order => {
+            if(!order.handed_at) return;
             const tt = timetable[order.handed_at];
             if(!tt) {
                 return timetable[order.handed_at] = [ order ];
@@ -27,6 +28,22 @@ class OrdersTimeTableView extends Component {
 
         return (
             <Grid container spacing={2}>
+                { Object.keys(timetable).map(time => {
+                    const orders = timetable[time];
+                    console.log(time);
+                    return (
+                        <Grid item xs={6} lg={3} className={classes.card}>
+                            <div> { time } </div>
+                            { orders.map(order => <OrderCard key={order.id} order={order} />) }
+                        </Grid>
+                    )
+                })}
+            </Grid>
+        );
+
+        /*
+        return (
+            <Grid container spacing={2}>
             {ordersList.map(order => (
                 <Grid key={order.id} item xs={6} lg={3} className={classes.card}>
                     <OrderCard key={order.id} order={order}/>
@@ -34,6 +51,7 @@ class OrdersTimeTableView extends Component {
             ))}
             </Grid>
         )
+        */
     }
 }
 
