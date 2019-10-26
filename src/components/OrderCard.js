@@ -12,7 +12,6 @@ class OrderCard extends Component {
 
     render() {
         let { order, menus } = this.props;
-        console.log(order);
         const orders = order.OrderItems.map(menu => {
             const orderMenu = menus.filter(m => m.id === menu.menu_id);
             return Object.assign(menu, orderMenu[0]);
