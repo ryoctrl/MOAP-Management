@@ -31,3 +31,6 @@ export const changePage = createAction(CHANGE_PAGE);
 
 export const CHANGE_ORDERS_PAGE_LAYOUT = 'CHANGE_ORDERS_PAGE_LAYOUT';
 export const changeOrdersPageLayout = createAction(CHANGE_ORDERS_PAGE_LAYOUT);
+
+export const UPDATE_TIME = 'UPDATE_TIME';
+export const updateTime = createAction(UPDATE_TIME);

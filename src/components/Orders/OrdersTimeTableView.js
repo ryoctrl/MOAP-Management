@@ -7,22 +7,18 @@ import DateHelper from '../../helpers/DateHelper';
 
 class OrdersTimeTableView extends Component {
     render() {
-        const { orders, classes } = this.props;
+        const { page, orders, classes } = this.props;
         const ordersList = orders.list;
-
-        if(ordersList.length === 0) {
-            return (
-                <Typography align="center" variant="h5" component="h5">
-                    現在注文はありません。
-                </Typography>
-            )
-        } 
-
 
         const timetable = {};
         ordersList.forEach(order => {
             if(!order.handed_at) return;
-            const dateStr = new DateHelper(order.handed_at, true).format('HH:mm');
+            const now = new DateHelper(page.now, true);
+            const date = new DateHelper(order.handed_at, true);
+
+            // NOTE: 受渡時刻を過ぎた注文は非表示
+            if(date.date.isBefore(now.date)) return;
+            const dateStr = date.format('HH:mm');
             const tt = timetable[dateStr];
             if(!tt) {
                 return timetable[dateStr] = [ order ];
@@ -31,6 +27,13 @@ class OrdersTimeTableView extends Component {
             tt.push(order);
         });
 
+        if(Object.keys(timetable).length === 0) {
+            return (
+                <Typography align="center" variant="h5" component="h5">
+                    現在注文はありません。
+                </Typography>
+            )
+        } 
         
         return (
             <Grid container spacing={2}>

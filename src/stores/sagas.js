@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 import { eventChannel } from 'redux-saga';
-import { fork, take, call, put } from 'redux-saga/effects';
+import { fork, take, call, put, delay } from 'redux-saga/effects';
 import { 
     allMenus, 
     uncompletedOrders,
@@ -17,7 +17,10 @@ import {
     completeOrder,
     orderCompleted,
     orderPaid,
+    updateTime,
 } from './actions';
+
+import moment from 'moment';
 
 const URL = 'https://moap-api.mosin.jp/';
 
@@ -95,9 +98,21 @@ function* completeOrderFlow() {
     }
 }
 
+function* timetableAutomationFlow() {
+    const now = moment();
+    const diff = 60 - now.seconds();
+    yield put(updateTime(now));
+    yield delay(diff * 1000);
+    while(true) {
+        yield put(updateTime(moment()));
+        yield delay(60000);
+    }
+}
+
 export default function* rootSaga() {
     yield fork(menuInit);
     yield fork(orderInit);
     yield fork(completeOrderFlow);
     yield fork(flow);
+    yield fork(timetableAutomationFlow);
 }

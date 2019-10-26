@@ -11,9 +11,11 @@ import {
     orderCompleted,
     orderPaid,
     changePage,
-    changeOrdersPageLayout
+    changeOrdersPageLayout,
+    updateTime
 } from './actions';
 import ORDERS_PAGE_LAYOUT from '../constants/OrdersPageLayout';
+import DateHelper from '../helpers/DateHelper';
 
 const initial = {
     menus: [],
@@ -24,6 +26,8 @@ const initial = {
         error: null
     },
     page: {
+        now: null,
+        nowStr: null,
         name: 'ORDERS',
         ordersPage: {
             layout: ORDERS_PAGE_LAYOUT.TIMETABLE,
@@ -79,6 +83,12 @@ const orders = createReducer({
 }, initial.orders);
 
 const page = createReducer({
+    [updateTime]: (state, payload) => {
+        console.log('updating time!');
+        console.log(payload);
+        console.log(new DateHelper(payload, true).format('HH:mm'));
+        return Object.assign({}, state, { now: payload, nowStr: new DateHelper(payload, true).format('MM月DD日 HH:mm')});
+    },
     [changePage]: (state, payload) => {
         return Object.assign({}, state, { name: payload });
     },
