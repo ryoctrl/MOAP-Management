@@ -19,6 +19,12 @@ class LayoutMenu extends Component {
                             className={classes.submitButton}>
                             タイムテーブル
                         </Button>
+
+                        <Button 
+                            onClick={() => dispatch(changeOrdersPageLayout(layouts.TIMETABLE_GROUPED_BY_MENU))}
+                            className={classes.submitButton}>
+                            タイムテーブル(商品ごと)
+                        </Button>
                             
                         <Button 
                             onClick={() => dispatch(changeOrdersPageLayout(layouts.LIST))}

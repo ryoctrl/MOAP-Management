@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import OrderCard from '../components/OrderCard';
 import OrdersGridView from '../components/Orders/OrdersGridView';
 import OrdersTimeTableView from '../components/Orders/OrdersTimeTableView';
+import ItemsTimeTableView from '../components/Orders/ItemsTimeTableView';
 import layouts from '../constants/OrdersPageLayout';
 
 class Orders extends Component {
@@ -15,6 +16,8 @@ class Orders extends Component {
         switch(page.ordersPage.layout) {
             case layouts.TIMETABLE:
                 return <OrdersTimeTableView />
+            case layouts.TIMETABLE_GROUPED_BY_MENU:
+                return <ItemsTimeTableView />
             case layouts.LIST:
                 return <OrdersGridView />
         }
