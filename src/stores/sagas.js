@@ -19,7 +19,7 @@ import {
     orderPaid,
 } from './actions';
 
-const URL = 'https://moap-api.mosin.jp/';
+const URL = process.env.REACT_APP_API_HOST;
 
 const connect = () => {
     const socket = io(URL);
