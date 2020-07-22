@@ -5,6 +5,7 @@ import {
     allMenus, 
     uncompletedOrders,
     completeOrderRequest,
+    updateHand,
 } from './api';
 import { 
     fetchMenus, 
@@ -18,6 +19,7 @@ import {
     orderCompleted,
     orderPaid,
     updateTime,
+    updateQueueHanded,
 } from './actions';
 
 import moment from 'moment';
@@ -94,7 +96,14 @@ function* orderInit() {
 function* completeOrderFlow() {
     while(true) {
         const action = yield take(completeOrder)
-        yield call(completeOrderRequest, action.payload);
+        const { data, error } = yield call(completeOrderRequest, action.payload);
+        if(data && !error) {
+            console.log(data);
+            yield put(updateQueueHanded(data.id));
+        } else {
+            console.log('complete failure!');
+            console.log(error);
+        }
     }
 }
 
@@ -109,10 +118,19 @@ function* timetableAutomationFlow() {
     }
 }
 
+function* updateHandedFlow() {
+    while(true) {
+        const { payload: orderId } = yield take(updateQueueHanded);
+        yield call(updateHand, orderId);
+    }
+}
+
+
 export default function* rootSaga() {
     yield fork(menuInit);
     yield fork(orderInit);
     yield fork(completeOrderFlow);
     yield fork(flow);
     yield fork(timetableAutomationFlow);
+    yield fork(updateHandedFlow);
 }

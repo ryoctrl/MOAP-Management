@@ -34,3 +34,8 @@ export const changeOrdersPageLayout = createAction(CHANGE_ORDERS_PAGE_LAYOUT);
 
 export const UPDATE_TIME = 'UPDATE_TIME';
 export const updateTime = createAction(UPDATE_TIME);
+
+export const UPDATE_HANDED_QUEUE = 'UPDATE_SERVICE_QUEUE';
+export const updateQueueHanded = createAction(UPDATE_HANDED_QUEUE);
+
+
