@@ -23,8 +23,7 @@ import {
 } from './actions';
 
 import moment from 'moment';
-
-const URL = 'https://moap-api.mosin.jp/';
+const URL = process.env.REACT_APP_API_HOST;
 
 const connect = () => {
     const socket = io(URL);
