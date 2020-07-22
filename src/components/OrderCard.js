@@ -5,51 +5,64 @@ import ThumbUp from '@material-ui/icons/ThumbUp';
 import { completeOrder } from '../stores/actions';
 
 class OrderCard extends Component {
-    onComplete() {
-        const { dispatch, order } = this.props;
-        dispatch(completeOrder(order));
+  onComplete() {
+    const { dispatch, order } = this.props;
+    dispatch(completeOrder(order));
+  }
+
+  render() {
+    let { order, menus } = this.props;
+    const orders = order.OrderItems.map((menu) => {
+      const orderMenu = menus.filter((m) => m.id === menu.menu_id);
+      return Object.assign(menu, orderMenu[0]);
+    });
+
+    const cols = [
+      { title: 'Name', field: 'name' },
+      { title: 'Amount', field: 'amount' },
+    ];
+
+    console.log(orders);
+    if (orders.length === 0) {
+      return <h3>現在のオーダーはありません</h3>;
+    } else {
+      return (
+        (
+          <MaterialTable
+            title={String(order.id)}
+            columns={cols}
+            data={orders}
+            options={{
+              search: false,
+              paging: false,
+              //pageSize: order.length,
+            }}
+            /*
+            actions={[
+              {
+                icon: ThumbUp,
+                tooltip: 'Save User',
+                onClick: (event, rowData) => {
+                  // Do save operation
+                },
+              },
+            ]}
+            */
+            actions={[
+              {
+                icon: '完成',
+                tooltip: 'Complete',
+                isFreeAction: true,
+                onClick: this.onComplete.bind(this),
+              },
+            ]}
+          />
+        ) || <div></div>
+      );
     }
-
-    render() {
-        let { order, menus } = this.props;
-        const orders = order.OrderItems.map(menu => {
-            const orderMenu = menus.filter(m => m.id === menu.menu_id);
-            return Object.assign(menu, orderMenu[0]);
-        });
-
-        const cols = [
-            {title: 'Name', field: 'name'},
-            {title: 'Amount', field: 'amount'},
-        ];
-
-        if(orders.length === 0) {
-            return(<h3>現在のオーダーはありません</h3>)
-        } else {
-            return (
-                <MaterialTable
-                    title={String(order.id)}
-                    columns={cols}
-                    data={orders}
-                    options={{
-                        search: false,
-                        paging: false,
-                        //pageSize: order.length,
-                    }}
-                    actions={[
-                        {
-                            icon: ThumbUp,
-                            tooltip: 'Complete',
-                            isFreeAction: true,
-                            onClick: this.onComplete.bind(this)
-                        }
-                    ]}
-                />
-            )
-        }
-    }
+  }
 }
 
-const select = state => state;
+const select = (state) => state;
 
 export default connect(select)(OrderCard);
-
